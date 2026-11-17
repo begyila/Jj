@@ -1,0 +1,58 @@
+{
+  "name": "labgraph-pro",
+  "productName": "LabGraph Pro",
+  "version": "3.0.0",
+  "description": "Offline scientific data analysis desktop application",
+  "main": "main.js",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "latest",
+    "electron-builder": "latest"
+  },
+  "build": {
+    "appId": "com.begum.labgraphpro",
+    "productName": "LabGraph Pro",
+    "asar": true,
+    "files": [
+      "app/**/*",
+      "assets/**/*",
+      "main.js",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "icon": "assets/app.ico",
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "portable": {
+      "artifactName": "LabGraph-Pro-3.0.0-Portable.exe"
+    },
+    "nsis": {
+      "artifactName": "LabGraph-Pro-3.0.0-Setup.exe",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
