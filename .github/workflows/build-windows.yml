@@ -1,0 +1,40 @@
+name: Build LabGraph Pro Windows EXE
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+  workflow_dispatch:
+
+jobs:
+  windows-exe:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Confirm application files are present
+        shell: pwsh
+        run: |
+          if (-not (Test-Path 'app/index.html')) { throw 'Missing app/index.html. First make the repository private, then upload the offline application.' }
+          if (-not (Test-Path 'assets/app.ico')) { throw 'Missing assets/app.ico.' }
+          if (-not (Test-Path 'assets/app.png')) { throw 'Missing assets/app.png.' }
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install build dependencies
+        run: npm install --no-audit --no-fund
+      - name: Create Windows EXEs
+        run: npm run build:win
+      - name: Publish Windows EXE files
+        uses: actions/upload-artifact@v4
+        with:
+          name: LabGraph-Pro-3.0.0-Windows-EXE
+          path: dist/*.exe
+          if-no-files-found: error
+          retention-days: 30
